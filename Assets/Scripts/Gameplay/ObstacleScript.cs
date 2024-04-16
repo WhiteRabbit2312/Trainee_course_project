@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoneScript : MonoBehaviour
+public class ObstacleScript : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPoint;
     private Vector3 _toLeft;
@@ -10,29 +10,16 @@ public class StoneScript : MonoBehaviour
     private Vector3 _toRight;
 
     private const int DirVariant = 3;
-    private float _spawnIncidence = 1f;
-    // Start is called before the first frame update
-    void Start()
+
+    private void OnEnable()
     {
-        
+        MoveObstacle();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private IEnumerator SpawnObstacle()
-    {
-        var obstacle = Instantiate(gameObject);
-        yield return new WaitForSeconds(_spawnIncidence);
-    }
-
-    private void MoveObstacle(GameObject obstacle)
+    private void MoveObstacle()
     {
         int dirrection = Random.Range(0, DirVariant);
-        Vector3 dirVector;
+        Vector3 dirVector = default;
 
         switch (dirrection)
         {
@@ -41,7 +28,8 @@ public class StoneScript : MonoBehaviour
             case 2: dirVector = _toRight; break;
         }
 
-
+        transform.position = Vector3.Lerp(_spawnPoint.position,
+                dirVector, Time.deltaTime);
     }
 
    

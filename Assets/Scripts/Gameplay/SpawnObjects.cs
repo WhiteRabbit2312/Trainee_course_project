@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using System.Linq;
 
 public class SpawnObjects : MonoBehaviour
 {
@@ -9,12 +9,14 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] private Transform _spawner;
     private List<GameObject> _pool;
     private readonly int _prefabNumber = 10;
+    private int spawnIncidence = 2000;
 
     private void Awake()
     {
         for(int i = 0; i < _prefabNumber; ++i)
         {
             var _obstacle = Instantiate(_prefab);
+            _obstacle.SetActive(false);
             _pool.Add(_obstacle);
         }
     }
@@ -27,12 +29,31 @@ public class SpawnObjects : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        SpawnObstacle();
+    }
+
+    async void SpawnObstacle()
+    {
+        GameObject obstacle = GetObstacle();
+        if (obstacle != null)
+        {
+            obstacle.transform.position = _spawner.position;
+            obstacle.SetActive(true);
+        }
+        await Task.Delay(spawnIncidence);
+
     }
 
     private GameObject GetObstacle()
     {
-        //var obstacle = _pool.FirstOrDefault(_prefab => _prefab.isStatic);
+        for(int i = 0; i < _pool.Count; ++i)
+        {
+            if (!_pool[i].activeInHierarchy)
+            {
+                return _pool[i];
+            }
+        }
+
         return null;
     }
 }

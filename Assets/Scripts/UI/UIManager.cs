@@ -19,4 +19,14 @@ public class UIManager : MonoBehaviour
     {
         
     }
+
+    public void StartButton()
+    {
+        _mainPanel.SetActive(false);
+    }
+
+    public void ExitButton()
+    {
+        Application.Quit();
+    }
 }

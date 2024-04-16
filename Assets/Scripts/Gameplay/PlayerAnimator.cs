@@ -1,17 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class PlayerAnimator : MonoBehaviour
 {
-    [SerializeField] private GameObject _mainPanel; 
-    [SerializeField] private GameObject _gameOverPanel; 
-    [SerializeField] private GameObject _inGamePanel; 
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame

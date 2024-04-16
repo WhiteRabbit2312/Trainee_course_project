@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainInput : MonoBehaviour
+public class MainInput : IMovement
 {
     // Start is called before the first frame update
     void Start()
@@ -14,5 +14,10 @@ public class MainInput : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void Controller()
+    {
+
     }
 }

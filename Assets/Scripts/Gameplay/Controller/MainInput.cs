@@ -2,120 +2,123 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainInput : MonoBehaviour, IMovement
+namespace TraineeGame
 {
-    private Vector3 startTouchPosition;
-    private Vector3 endTouchPosition;
-
-    private bool swipeUp;
-    private bool swipeDown;
-    private bool swipeLeft;
-    private bool swipeRight;
-    // Start is called before the first frame update
-    void Start()
+    public class MainInput : MonoBehaviour, IMovement
     {
-        
-    }
+        private Vector3 startTouchPosition;
+        private Vector3 endTouchPosition;
 
-    // Update is called once per frame
-    void Update()
-    {
-        Controller();
-    }
-
-    public void Controller()
-    {
-        if(Input.touchCount > 0)
+        private bool swipeUp;
+        private bool swipeDown;
+        private bool swipeLeft;
+        private bool swipeRight;
+        // Start is called before the first frame update
+        void Start()
         {
-            Touch touch = Input.GetTouch(0);
 
-            if(touch.phase == TouchPhase.Began)
-            {
-                startTouchPosition = touch.position;
-            }
-
-            if(touch.phase == TouchPhase.Ended)
-            {
-                endTouchPosition = touch.position;
-            }
         }
 
-        DetectSwipe();
-    }
-
-    private void DetectSwipe()
-    {
-        float swipeDistanceThreshold = 50f;
-
-        Vector2 swipeDirection = endTouchPosition - startTouchPosition;
-
-        if(Mathf.Abs(swipeDirection.x) > swipeDistanceThreshold || 
-            Mathf.Abs(swipeDirection.y) > swipeDistanceThreshold)
+        // Update is called once per frame
+        void Update()
         {
-            if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
+            Controller();
+        }
+
+        public void Controller()
+        {
+            if (Input.touchCount > 0)
             {
+                Touch touch = Input.GetTouch(0);
 
-
-                if (swipeDirection.x > 0)
+                if (touch.phase == TouchPhase.Began)
                 {
-                    swipeRight = true;
+                    startTouchPosition = touch.position;
+                }
+
+                if (touch.phase == TouchPhase.Ended)
+                {
+                    endTouchPosition = touch.position;
+                }
+            }
+
+            DetectSwipe();
+        }
+
+        private void DetectSwipe()
+        {
+            float swipeDistanceThreshold = 50f;
+
+            Vector2 swipeDirection = endTouchPosition - startTouchPosition;
+
+            if (Mathf.Abs(swipeDirection.x) > swipeDistanceThreshold ||
+                Mathf.Abs(swipeDirection.y) > swipeDistanceThreshold)
+            {
+                if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
+                {
+
+
+                    if (swipeDirection.x > 0)
+                    {
+                        swipeRight = true;
+                    }
+                    else
+                    {
+                        swipeLeft = true;
+                    }
                 }
                 else
                 {
-                    swipeLeft = true;
+                    if (swipeDirection.y > 0)
+                    {
+                        swipeUp = true;
+                    }
+                    else
+                    {
+                        swipeDown = true;
+                    }
                 }
             }
-            else
+        }
+
+        public bool GoUp()
+        {
+            if (swipeUp)
             {
-                if (swipeDirection.y > 0)
-                {
-                    swipeUp = true;
-                }
-                else
-                {
-                    swipeDown = true;
-                }
+                swipeUp = false;
+                return true;
             }
+            return false;
         }
-    }
 
-    public bool GoUp()
-    {
-        if (swipeUp)
+        public bool GoDown()
         {
-            swipeUp = false;
-            return true;
+            if (swipeDown)
+            {
+                swipeDown = false;
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
-    public bool GoDown()
-    {
-        if (swipeDown)
+        public bool GoRight()
         {
-            swipeDown = false;
-            return true;
+            if (swipeRight)
+            {
+                swipeRight = false;
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
-    public bool GoRight()
-    {
-        if (swipeRight)
+        public bool GoLeft()
         {
-            swipeRight = false;
-            return true;
+            if (swipeLeft)
+            {
+                swipeLeft = false;
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
-
-    public bool GoLeft()
-    {
-        if (swipeLeft)
-        {
-            swipeLeft = false;
-            return true;
-        }
-        return false;
     }
 }

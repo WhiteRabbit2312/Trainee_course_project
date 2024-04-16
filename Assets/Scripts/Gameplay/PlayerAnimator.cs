@@ -2,50 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class PlayerAnimator : MonoBehaviour
+namespace TraineeGame
 {
-    
-    private Animator animator;
-
-    private void Awake()
+    public class PlayerAnimator : MonoBehaviour
     {
-        animator = GetComponent<Animator>();
+        private Animator animator;
 
-        PlayerController.onPlayerIdle += StayAnimation;
-        PlayerController.onPlayerJump += JumpAnimation;
-        PlayerController.onPlayerRun += RunAnimation;
-        PlayerController.onPlayerSlide += SlideAnimation;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+            PlayerController.onPlayerIdle += StayAnimation;
+            PlayerController.onPlayerJump += JumpAnimation;
+            PlayerController.onPlayerRun += RunAnimation;
+            PlayerController.onPlayerSlide += SlideAnimation;
+        }
+        // Start is called before the first frame update
+        void Start()
+        {
 
-    private void StayAnimation()
-    {
-        animator.SetBool("Stay", true);
-    }
+        }
 
-    private void JumpAnimation()
-    {
-        animator.SetBool("Jump", true);
-    }
+        // Update is called once per frame
+        void Update()
+        {
 
-    private void RunAnimation()
-    {
-        animator.SetBool("Run", true);
-    }
+        }
 
-    private void SlideAnimation()
-    {
-        animator.SetBool("Slide", true);
+        private void StayAnimation()
+        {
+            animator.SetBool("Stay", true);
+        }
+
+        private void JumpAnimation()
+        {
+            animator.SetBool("Jump", true);
+        }
+
+        private void RunAnimation()
+        {
+            animator.SetBool("Run", true);
+        }
+
+        private void SlideAnimation()
+        {
+            animator.SetBool("Slide", true);
+        }
     }
 }

@@ -1,9 +1,12 @@
-public interface IMovement
+namespace TraineeGame
 {
-    void Controller();
+    public interface IMovement
+    {
+        void Controller();
 
-    bool GoLeft();
-    bool GoRight();
-    bool GoUp();
-    bool GoDown();
+        bool GoLeft();
+        bool GoRight();
+        bool GoUp();
+        bool GoDown();
+    }
 }

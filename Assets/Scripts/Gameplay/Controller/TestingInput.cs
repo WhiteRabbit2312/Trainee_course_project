@@ -2,69 +2,72 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestingInput : MonoBehaviour, IMovement
+namespace TraineeGame
 {
-    private bool moveUp;
-    private bool moveDown;
-    private bool moveLeft;
-    private bool moveRight;
-    // Start is called before the first frame update
-    void Start()
+    public class TestingInput : MonoBehaviour, IMovement
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Controller()
-    {
-        if (Input.GetKey(KeyCode.A)) moveLeft = true;
-        if (Input.GetKey(KeyCode.D)) moveRight = true;
-        if (Input.GetKey(KeyCode.W)) moveUp = true;
-        if (Input.GetKey(KeyCode.S)) moveDown = true;
-    }
-
-    public bool GoLeft()
-    {
-        if (moveLeft)
+        private bool moveUp;
+        private bool moveDown;
+        private bool moveLeft;
+        private bool moveRight;
+        // Start is called before the first frame update
+        void Start()
         {
-            moveLeft = false;
-            return true;
-        }
-        return false;
-    }
 
-    public bool GoRight()
-    {
-        if (moveRight)
-        {
-            moveRight = false;
-            return true;
         }
-        return false;
-    }
 
-    public bool GoUp()
-    {
-        if (moveUp)
+        // Update is called once per frame
+        void Update()
         {
-            moveUp = false;
-            return true;
-        }
-        return false;
-    }
 
-    public bool GoDown()
-    {
-        if (moveDown)
-        {
-            moveDown = false;
-            return true;
         }
-        return false;
+
+        public void Controller()
+        {
+            if (Input.GetKey(KeyCode.A)) moveLeft = true;
+            if (Input.GetKey(KeyCode.D)) moveRight = true;
+            if (Input.GetKey(KeyCode.W)) moveUp = true;
+            if (Input.GetKey(KeyCode.S)) moveDown = true;
+        }
+
+        public bool GoLeft()
+        {
+            if (moveLeft)
+            {
+                moveLeft = false;
+                return true;
+            }
+            return false;
+        }
+
+        public bool GoRight()
+        {
+            if (moveRight)
+            {
+                moveRight = false;
+                return true;
+            }
+            return false;
+        }
+
+        public bool GoUp()
+        {
+            if (moveUp)
+            {
+                moveUp = false;
+                return true;
+            }
+            return false;
+        }
+
+        public bool GoDown()
+        {
+            if (moveDown)
+            {
+                moveDown = false;
+                return true;
+            }
+            return false;
+        }
     }
 }

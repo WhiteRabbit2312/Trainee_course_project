@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 namespace TraineeGame
 {
@@ -29,6 +27,7 @@ namespace TraineeGame
 
         private void EnablegameOverPanel()
         {
+
             _gameOverPanel.SetActive(true);
         }
 
@@ -37,6 +36,16 @@ namespace TraineeGame
             Application.Quit();
         }
 
+        public void RespawnGameButton()
+        {
 
+        }
+
+        public void ReturnToMenuButton()
+        {
+            GameManager.onPreGame.Invoke();
+            _gameOverPanel.SetActive(false);
+            _mainPanel.SetActive(true);
+        }
     }
 }

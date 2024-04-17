@@ -5,4 +5,6 @@ public interface ISpeedPlayer
         get;
         set;
     }
+
+
 }

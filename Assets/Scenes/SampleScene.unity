@@ -1569,7 +1569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8510e205389cde42b9c0ddf4b2be212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 8314967044336598700, guid: d7b49fb86f0732847ae0f741bec76b58, type: 3}
+  _prefab: {fileID: 1931532417284826566, guid: d7b49fb86f0732847ae0f741bec76b58, type: 3}
 --- !u!114 &603888378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1582,7 +1582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a85699b4703a574ca888564d74d5610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 8521438324121670365, guid: 9be0b135462f3d74e8a6669de5f4e2e4, type: 3}
+  _prefab: {fileID: -4145025960421636567, guid: 9be0b135462f3d74e8a6669de5f4e2e4, type: 3}
 --- !u!1 &624148575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1772,6 +1772,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf491e9827c0f149914a7803898c9a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  _animation: {fileID: 0}
 --- !u!114 &639560730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1819,10 +1823,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.9173591
+  m_Radius: 0.2
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1.0355598, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &639560733
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1848,7 +1852,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1 &668323229
 GameObject:
@@ -2640,7 +2644,7 @@ Transform:
   m_GameObject: {fileID: 1074379614}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.79398, y: -19.627098, z: 33.545567}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3741,7 +3745,7 @@ Transform:
   m_GameObject: {fileID: 1736514223}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7436835, y: -1.0154603, z: -1.0738281}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3996,6 +4000,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf491e9827c0f149914a7803898c9a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _animation: {fileID: 0}
 --- !u!114 &1947642357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4020,9 +4028,9 @@ GameObject:
   - component: {fileID: 1951228111}
   - component: {fileID: 1951228110}
   - component: {fileID: 1951228109}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

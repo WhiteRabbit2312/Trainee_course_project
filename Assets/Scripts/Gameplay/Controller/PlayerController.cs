@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -7,6 +6,10 @@ namespace TraineeGame
 {
     public class PlayerController : MonoBehaviour
     {
+        [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private Animation _animation;
+
+        private float groundCheckDistance = 1f;
         private IMovement _input;
         public static Action onPlayerIdle;
         public static Action onPlayerJump;
@@ -19,8 +22,9 @@ namespace TraineeGame
 
         private PlayerPos playerPos;
         private Rigidbody rb;
-        private float jumpForce = 4f;
-
+        private float jumpForce = 6f;
+        private bool _isGrounded = true;
+        private CapsuleCollider _collider;
         private enum PlayerPos
         {
             Left, 
@@ -39,6 +43,7 @@ namespace TraineeGame
 #endif
             playerPos = PlayerPos.Center;
             rb = GetComponent<Rigidbody>();
+            _collider = GetComponent<CapsuleCollider>();
         }
 
 
@@ -63,7 +68,8 @@ namespace TraineeGame
 
             else if (_input.GoUp())
             {
-                Jump();
+                if(_isGrounded)
+                    Jump();
             }
 
             else if (_input.GoDown())
@@ -76,12 +82,27 @@ namespace TraineeGame
         private void Jump()
         {
             onPlayerJump?.Invoke();
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            
+            bool isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+            if(isGrounded)
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
         private void Slide()
         {
             onPlayerSlide?.Invoke();
+
+            StartCoroutine(ChangeColliderSize());  
+        }
+
+        private IEnumerator ChangeColliderSize()// TODO
+        {
+            _collider.height = 0.9f;
+            _collider.center = new Vector3(0f, 0.47f, 0f);
+
+            yield return new WaitForSeconds(1f);
+            _collider.height = 2f;
+            _collider.center = new Vector3(0f, 1f, 0f);
         }
 
         private void Left()
@@ -125,6 +146,8 @@ namespace TraineeGame
             {
                 GameManager.onEndGame?.Invoke();
             }
+
+         
         }
     }
 }

@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Border : MonoBehaviour
+namespace TraineeGame
 {
-    private void OnTriggerEnter(Collider other)
+    public class Border : MonoBehaviour
     {
-        if(other.gameObject.tag == "Obstacle")
+        private void OnTriggerEnter(Collider other)
         {
-            other.gameObject.SetActive(false);
+            if (other.gameObject.tag == "Obstacle")
+            {
+                other.gameObject.SetActive(false);
+            }
         }
     }
 }

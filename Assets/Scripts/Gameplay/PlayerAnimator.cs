@@ -12,7 +12,8 @@ namespace TraineeGame
         {
             animator = GetComponent<Animator>();
 
-            PlayerController.onPlayerIdle += StayAnimation;
+            GameManager.onEndGame += StayAnimation;
+
             PlayerController.onPlayerJump += JumpAnimation;
             PlayerController.onPlayerRun += RunAnimation;
             PlayerController.onPlayerSlide += SlideAnimation;

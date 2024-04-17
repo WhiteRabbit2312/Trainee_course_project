@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using System;
 
 namespace TraineeGame
 {
@@ -13,11 +11,12 @@ namespace TraineeGame
 
         private List<ObstacleMovement> _pool = new List<ObstacleMovement>();
         
-        private IObstacleType _stoneObstacle;//
-        private IObstacleType _gateObstacle;//
+        private IObstacleType _stoneObstacle;
+        private IObstacleType _gateObstacle;
 
         private int counter = 10;
         private float _speed = 5f;
+        private bool _isGameplay = true;
         public float Speed
         {
             get { return _speed; }
@@ -39,7 +38,7 @@ namespace TraineeGame
         {
             for (int i = 0; i < PrefabNumber; ++i)
             {
-                int obstacleType = UnityEngine.Random.Range(0, ObstacleType);
+                int obstacleType = Random.Range(0, ObstacleType);
                 var _obstacle = GetObstacleType(obstacleType);
                
                 _obstacle.gameObject.SetActive(false);
@@ -67,11 +66,11 @@ namespace TraineeGame
         }
 
         private void CanPlay() => StartCoroutine(SpawnObstacle());
-        private void StopPlay() => StopCoroutine(SpawnObstacle());
+        private void StopPlay() => _isGameplay = false;
 
         private IEnumerator SpawnObstacle()
         {
-            while (true)
+            while (_isGameplay)
             {
                 ObstacleMovement obstacle = GetObstacleFromPool();
                 if (obstacle != null)
@@ -81,9 +80,7 @@ namespace TraineeGame
 
                     if(counter % 20 == 0)
                     {
-
-                        Speed += 2;
-                        
+                        Speed += 1; 
                     }
                 }
                 yield return new WaitForSeconds(1f);

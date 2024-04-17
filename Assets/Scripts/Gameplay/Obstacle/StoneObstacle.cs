@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TraineeGame;
 
+namespace TraineeGame
+{
     public class StoneObstacle : MonoBehaviour, IObstacleType
     {
         [SerializeField] private ObstacleMovement _prefab;
@@ -12,4 +11,5 @@ using TraineeGame;
             return stone;
         }
     }
+}
 

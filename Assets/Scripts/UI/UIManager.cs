@@ -16,18 +16,6 @@ namespace TraineeGame
             GameManager.onGameplay += CloseMenuTab;
             GameManager.onEndGame += EnablegameOverPanel;
         }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
         
         public void StartButton()
         {

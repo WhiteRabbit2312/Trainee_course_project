@@ -5,10 +5,10 @@ using TraineeGame;
 
     public class StoneObstacle : MonoBehaviour, IObstacleType
     {
-        [SerializeField] private GameObject _prefab;
-        public GameObject GetObstacle()
+        [SerializeField] private ObstacleMovement _prefab;
+        public ObstacleMovement GetObstacle()
         {
-            GameObject stone = Instantiate(_prefab);
+            ObstacleMovement stone = Instantiate(_prefab);
             return stone;
         }
     }

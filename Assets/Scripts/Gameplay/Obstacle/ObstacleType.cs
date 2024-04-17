@@ -3,6 +3,6 @@ namespace TraineeGame
 {
     public interface IObstacleType
     {
-        GameObject GetObstacle();
+        ObstacleMovement GetObstacle();
     }
 }

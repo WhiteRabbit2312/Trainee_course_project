@@ -12,12 +12,13 @@ namespace TraineeGame
 
         private const int DirVariant = 3;
        
-        private float speed = 5f;
+        //private float speed = 5f;
         private Vector3 dirVector = new Vector3(0f, 0f, -1.4f);
-
-        private void Awake()
+        private ISpeedPlayer _speed;
+        
+        public void ApplySpeed(ISpeedPlayer speedPlayer)
         {
-
+            _speed = speedPlayer;
         }
 
         private void OnEnable()
@@ -39,7 +40,7 @@ namespace TraineeGame
 
         private void MoveObstacle()
         {
-            transform.Translate(dirVector.normalized * speed * Time.deltaTime);
+            transform.Translate(dirVector.normalized * _speed.Speed * Time.deltaTime);
         }
     }
 }

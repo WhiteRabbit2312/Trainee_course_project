@@ -101,8 +101,6 @@ namespace TraineeGame
             else return;
         }
 
-
-
         private void Right()
         {
             if (playerPos == PlayerPos.Center)

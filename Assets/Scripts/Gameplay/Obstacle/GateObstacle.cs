@@ -6,11 +6,11 @@ namespace TraineeGame
 {
     public class GateObstacle : MonoBehaviour, IObstacleType
     {
-        [SerializeField] private GameObject _prefab;
+        [SerializeField] private ObstacleMovement _prefab;
 
-        public GameObject GetObstacle()
+        public ObstacleMovement GetObstacle()
         {
-            GameObject gate = Instantiate(_prefab);
+            ObstacleMovement gate = Instantiate(_prefab);
             return gate;
         }
     }

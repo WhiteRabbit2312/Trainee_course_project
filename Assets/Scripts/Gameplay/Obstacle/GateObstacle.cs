@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace TraineeGame
 {
-    public class StoneObstacle : MonoBehaviour, IObstacleType
+    public class GateObstacle : MonoBehaviour, IObstacleType
     {
         [SerializeField] private GameObject _prefab;
+
         public GameObject GetObstacle()
         {
-            return _prefab;
+            GameObject gate = Instantiate(_prefab);
+            return gate;
         }
     }
 }

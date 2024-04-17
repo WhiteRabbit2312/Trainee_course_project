@@ -10,6 +10,8 @@ namespace TraineeGame
         private bool moveDown;
         private bool moveLeft;
         private bool moveRight;
+
+
         // Start is called before the first frame update
         void Start()
         {
@@ -19,15 +21,15 @@ namespace TraineeGame
         // Update is called once per frame
         void Update()
         {
-
+            Controller();
         }
 
         public void Controller()
         {
-            if (Input.GetKey(KeyCode.A)) moveLeft = true;
-            if (Input.GetKey(KeyCode.D)) moveRight = true;
-            if (Input.GetKey(KeyCode.W)) moveUp = true;
-            if (Input.GetKey(KeyCode.S)) moveDown = true;
+            if (Input.GetKeyDown(KeyCode.A)) moveLeft = true;
+            if (Input.GetKeyDown(KeyCode.D)) moveRight = true;
+            if (Input.GetKeyDown(KeyCode.W)) moveUp = true;
+            if (Input.GetKeyDown(KeyCode.S)) moveDown = true;
         }
 
         public bool GoLeft()

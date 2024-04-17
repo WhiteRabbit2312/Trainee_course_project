@@ -13,41 +13,44 @@ namespace TraineeGame
         public static Action onPlayerRun;
         public static Action onPlayerSlide;
 
-        private Vector3 _idlePlayerPosition;
-        private Vector3 _leftPlayerPosition;
-        private Vector3 _rightPlayerPosition;
-        private PlayerRunPosition _state;
+        private Vector3 _idlePlayerPosition = new Vector3(0f, 0f, 0f);
+        private Vector3 _leftPlayerPosition = new Vector3(-1.4f, 0f, 0f);
+        private Vector3 _rightPlayerPosition = new Vector3(1.4f, 0f, 0f);
+
+        private PlayerPos playerPos;
+        private Rigidbody rb;
+        private float jumpForce = 4f;
+
+        private enum PlayerPos
+        {
+            Left, 
+            Center,
+            Right
+        }
 
         private void Awake()
         {
 #if UNITY_EDITOR
 
-            _input = new MainInput();
+            _input = GetComponent<TestingInput>();
 
 #elif UNITY_ANDROID
         _input = new MainInput();
 #endif
-
+            playerPos = PlayerPos.Center;
+            rb = GetComponent<Rigidbody>();
         }
 
-        private enum PlayerRunPosition
-        {
-            Left,
-            Center,
-            Right
-        }
 
         // Start is called before the first frame update
         void Start()
         {
-            _state = PlayerRunPosition.Center;
+            
         }
 
         // Update is called once per frame
         void Update()
         {
-
-
             if (_input.GoLeft())
             {
                 Left();
@@ -67,24 +70,13 @@ namespace TraineeGame
             {
                 Slide();
             }
-
-            else
-            {
-                Idle();
-            }
         }
 
-      
-
-        private void Idle()
-        {
-            transform.position = _idlePlayerPosition;
-            onPlayerIdle?.Invoke();
-        }
 
         private void Jump()
         {
             onPlayerJump?.Invoke();
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
         private void Slide()
@@ -94,49 +86,46 @@ namespace TraineeGame
 
         private void Left()
         {
-            if (_state == PlayerRunPosition.Center)
+            if (playerPos == PlayerPos.Center)
             {
-                transform.position = Vector3.Lerp(_idlePlayerPosition,
-                    _leftPlayerPosition, Time.deltaTime);
-                _state = PlayerRunPosition.Left;
-                return;
+                transform.position = _leftPlayerPosition;
+                playerPos = PlayerPos.Left;
             }
 
-            else if (_state == PlayerRunPosition.Right)
+            else if (playerPos == PlayerPos.Right)
             {
-                transform.position = Vector3.Lerp(_rightPlayerPosition,
-                    _idlePlayerPosition, Time.deltaTime);
-
-                _state = PlayerRunPosition.Center;
+                transform.position = _idlePlayerPosition;
+                playerPos = PlayerPos.Center;
             }
+
+            else return;
         }
 
 
 
         private void Right()
         {
-            if (_state == PlayerRunPosition.Left)
+            if (playerPos == PlayerPos.Center)
             {
-                transform.position = Vector3.Lerp(_leftPlayerPosition,
-                    _idlePlayerPosition, Time.deltaTime);
-
-                _state = PlayerRunPosition.Center;
-                return;
+                transform.position = _rightPlayerPosition;
+                playerPos = PlayerPos.Right;
             }
 
-            else if (_state == PlayerRunPosition.Center)
+            else if (playerPos == PlayerPos.Left)
             {
-                transform.position = Vector3.Lerp(_idlePlayerPosition,
-                    _rightPlayerPosition, Time.deltaTime);
-                _state = PlayerRunPosition.Right;
+                transform.position = _idlePlayerPosition;
+
+                playerPos = PlayerPos.Center;
             }
+
+            else return;
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if(other.gameObject.tag == "Obstacle")
             {
-                GameManager.State = GameState.EndGame;
+                GameManager.onEndGame?.Invoke();
             }
         }
     }

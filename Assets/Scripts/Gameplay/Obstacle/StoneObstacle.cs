@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TraineeGame;
 
-namespace TraineeGame
-{
-    public class GateObstacle : MonoBehaviour, IObstacleType
+    public class StoneObstacle : MonoBehaviour, IObstacleType
     {
         [SerializeField] private GameObject _prefab;
-
         public GameObject GetObstacle()
         {
-            return _prefab;
+            GameObject stone = Instantiate(_prefab);
+            return stone;
         }
     }
-}
+

@@ -1,39 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace TraineeGame
 {
-    public enum GameState
-    {
-        PreGame,
-        Gameplay,
-        EndGame
-    }
-
     public class GameManager : MonoBehaviour
     {
-        public static GameState State
-        {
-            get;
-            set;
-        }
-
-        private void Awake()
-        {
-            State = GameState.PreGame;
-
-        }
-
-        public void StartButton()
-        {
-            State = GameState.Gameplay;
-
-        }
-
-        public void NewGameButton()
-        {
-            State = GameState.PreGame;
-        }
+        public static Action onPreGame;
+        public static Action onGameplay;
+        public static Action onEndGame;
     }
 }

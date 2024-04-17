@@ -10,6 +10,13 @@ namespace TraineeGame
         [SerializeField] private GameObject _mainPanel;
         [SerializeField] private GameObject _gameOverPanel;
         [SerializeField] private GameObject _inGamePanel;
+
+        private void Awake()
+        {
+            GameManager.onGameplay += CloseMenuTab;
+            GameManager.onEndGame += EnablegameOverPanel;
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -21,15 +28,27 @@ namespace TraineeGame
         {
 
         }
-        /*
+        
         public void StartButton()
         {
+            GameManager.onGameplay?.Invoke();
+        }
+
+        private void CloseMenuTab()
+        {
             _mainPanel.SetActive(false);
-        }*/
+        }
+
+        private void EnablegameOverPanel()
+        {
+            _gameOverPanel.SetActive(true);
+        }
 
         public void ExitButton()
         {
             Application.Quit();
         }
+
+
     }
 }

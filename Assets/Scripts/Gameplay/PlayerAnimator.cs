@@ -16,6 +16,8 @@ namespace TraineeGame
             PlayerController.onPlayerJump += JumpAnimation;
             PlayerController.onPlayerRun += RunAnimation;
             PlayerController.onPlayerSlide += SlideAnimation;
+
+            GameManager.onGameplay += RunAnimation;
         }
         // Start is called before the first frame update
         void Start()
@@ -31,7 +33,7 @@ namespace TraineeGame
 
         private void StayAnimation()
         {
-            animator.SetBool("Stay", true);
+            animator.SetBool("Run", false);
         }
 
         private void JumpAnimation()

@@ -32,7 +32,7 @@ namespace TraineeGame
             if (Input.GetKeyDown(KeyCode.S)) moveDown = true;
         }
 
-        public bool GoLeft()
+        public bool GoLeft() //CheckMoveLeft()
         {
             if (moveLeft)
             {

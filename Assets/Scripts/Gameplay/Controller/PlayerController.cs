@@ -11,27 +11,21 @@ namespace TraineeGame
 
         private float groundCheckDistance = 1f;
         private IMovement _input;
-        public static Action onPlayerIdle;
+        public static event Action onPlayerIdle;
         public static Action onPlayerJump;
         public static Action onPlayerRun;
         public static Action onPlayerSlide;
 
-        private Vector3 _idlePlayerPosition = new Vector3(0f, 0f, 0f);
-        private Vector3 _leftPlayerPosition = new Vector3(-1.4f, 0f, 0f);
-        private Vector3 _rightPlayerPosition = new Vector3(1.4f, 0f, 0f);
+        private float _centerPosX = 0f;
+        private float _leftPosX = -1.4f;
+        private float _rightPosX = 1.4f;
 
         private PlayerPos playerPos;
         private Rigidbody rb;
         private float jumpForce = 6f;
         private bool _isGrounded = true;
         private CapsuleCollider _collider;
-        private enum PlayerPos
-        {
-            Left, 
-            Center,
-            Right
-        }
-
+       
         private void Awake()
         {
 #if UNITY_EDITOR
@@ -83,9 +77,14 @@ namespace TraineeGame
         {
             onPlayerJump?.Invoke();
             
-            bool isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-            if(isGrounded)
+            if(CheckGround())
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+
+        private bool CheckGround()
+        {
+            bool isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+            return isGrounded;
         }
 
         private void Slide()
@@ -109,13 +108,13 @@ namespace TraineeGame
         {
             if (playerPos == PlayerPos.Center)
             {
-                transform.position = _leftPlayerPosition;
+                transform.position = new Vector3(_leftPosX, transform.position.y, transform.position.z);
                 playerPos = PlayerPos.Left;
             }
 
             else if (playerPos == PlayerPos.Right)
             {
-                transform.position = _idlePlayerPosition;
+                transform.position = new Vector3(_centerPosX, transform.position.y, transform.position.z);
                 playerPos = PlayerPos.Center;
             }
 
@@ -126,13 +125,13 @@ namespace TraineeGame
         {
             if (playerPos == PlayerPos.Center)
             {
-                transform.position = _rightPlayerPosition;
+                transform.position = new Vector3(_rightPosX, transform.position.y, transform.position.z);
                 playerPos = PlayerPos.Right;
             }
 
             else if (playerPos == PlayerPos.Left)
             {
-                transform.position = _idlePlayerPosition;
+                transform.position = new Vector3(_centerPosX, transform.position.y, transform.position.z);
 
                 playerPos = PlayerPos.Center;
             }
@@ -144,10 +143,13 @@ namespace TraineeGame
         {
             if(other.gameObject.tag == "Obstacle")
             {
-                GameManager.onEndGame?.Invoke();
+                Deatn();
             }
+        }
 
-         
+        private void Deatn()
+        {
+            GameManager.onEndGame?.Invoke();
         }
     }
 }

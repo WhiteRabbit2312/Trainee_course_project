@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace TraineeGame
 {
-    public class Border : MonoBehaviour
+    public class Border : MonoBehaviour //DeathZone
     {
         private void OnTriggerEnter(Collider other)
         {

@@ -1,6 +1,6 @@
 namespace TraineeGame
 {
-    public interface IObstacleType
+    public interface IObstacleType // IObtacleFactory
     {
         ObstacleMovement GetObstacle();
     }

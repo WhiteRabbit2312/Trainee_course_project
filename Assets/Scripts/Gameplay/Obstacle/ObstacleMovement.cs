@@ -8,7 +8,7 @@ namespace TraineeGame
         private Vector3 _spawnCenter = new Vector3(0f, 0f, 17f);
         private Vector3 _spawnRight = new Vector3(1.4f, 0f, 17f);
 
-        private const int DirVariant = 3;
+        private const int DirVariant = 3; //MaxSpawnCount
 
         private Vector3 dirVector = new Vector3(0f, 0f, -1.4f);
         private ISpeedPlayer _speed;

@@ -6,8 +6,8 @@ namespace TraineeGame
 {
     public class SpawnObjects : MonoBehaviour, ISpeedPlayer
     {
-        private const int PrefabNumber = 20;
-        private const int ObstacleType = 2;
+        private const int PrefabNumber = 20; //PrefabCount
+        private const int ObstacleType = 2; //MaxPbstacleCount
 
         private List<ObstacleMovement> _pool = new List<ObstacleMovement>();
         
@@ -27,7 +27,7 @@ namespace TraineeGame
         private void Awake()
         {
             _stoneObstacle = GetComponent<StoneObstacle>();
-            _gateObstacle = GetComponent<GateObstacle>();
+            _gateObstacle = GetComponent<GateFactory>();
 
             GameManager.onGameplay += CanPlay;
             GameManager.onEndGame += StopPlay;

@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace TraineeGame
 {
-    public class Border : MonoBehaviour //DeathZone
+    public class DeathZone : MonoBehaviour
     {
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Obstacle")
+            if (other.gameObject.tag == "DeathZone")
             {
                 other.gameObject.SetActive(false);
             }

@@ -6,17 +6,21 @@ namespace TraineeGame
 {
     public class SpawnObjects : MonoBehaviour, ISpeedPlayer
     {
+        [SerializeField] private ObstacleMovement _prefabStone;
+        [SerializeField] private ObstacleMovement _prefabGate;
         private const int PrefabNumber = 20; //PrefabCount
         private const int ObstacleType = 2; //MaxPbstacleCount
 
         private List<ObstacleMovement> _pool = new List<ObstacleMovement>();
         
-        private IObstacleType _stoneObstacle;
-        private IObstacleType _gateObstacle;
+        private IObtacleFactory _stoneObstacle;
+        private IObtacleFactory _gateObstacle;
 
         private int counter = 10;
         private float _speed = 5f;
         private bool _isGameplay = true;
+
+
         public float Speed
         {
             get { return _speed; }
@@ -26,8 +30,8 @@ namespace TraineeGame
 
         private void Awake()
         {
-            _stoneObstacle = GetComponent<StoneObstacle>();
-            _gateObstacle = GetComponent<GateFactory>();
+            _stoneObstacle = new StoneFactory(_prefabStone);
+            _gateObstacle = new GateFactory(_prefabGate);
 
             GameManager.onGameplay += CanPlay;
             GameManager.onEndGame += StopPlay;
@@ -52,12 +56,12 @@ namespace TraineeGame
             switch (type)
             {
                 case 0:
-                    var obst1 = _stoneObstacle.GetObstacle();
+                    var obst1 = _stoneObstacle.CreateObstacle();
                     obst1.ApplySpeed(this);
                     return obst1;
 
                 case 1: 
-                    var obst2 = _gateObstacle.GetObstacle();
+                    var obst2 = _gateObstacle.CreateObstacle();
                     obst2.ApplySpeed(this);
                     return obst2;
 
@@ -65,8 +69,17 @@ namespace TraineeGame
             }
         }
 
-        private void CanPlay() => StartCoroutine(SpawnObstacle());
-        private void StopPlay() => _isGameplay = false;
+        private void CanPlay() 
+        {
+            _isGameplay = true;
+            StartCoroutine(SpawnObstacle()); 
+        }
+        private void StopPlay()
+        {
+            _isGameplay = false;
+            DisableObstacles();
+        }
+            
 
         private IEnumerator SpawnObstacle()
         {
@@ -83,9 +96,19 @@ namespace TraineeGame
                         Speed += 1; 
                     }
                 }
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(1.5f);
             }
 
+        }
+
+
+
+        private void DisableObstacles()
+        {
+            foreach(var item in _pool)
+            {
+                item.gameObject.SetActive(false);
+            }
         }
 
         private ObstacleMovement GetObstacleFromPool()

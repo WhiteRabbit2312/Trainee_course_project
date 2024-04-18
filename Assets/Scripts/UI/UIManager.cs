@@ -17,7 +17,7 @@ namespace TraineeGame
         
         public void StartButton()
         {
-            GameManager.onGameplay?.Invoke();
+            GameManager.Gameplay();
         }
 
         private void CloseMenuTab()
@@ -43,7 +43,7 @@ namespace TraineeGame
 
         public void ReturnToMenuButton()
         {
-            GameManager.onPreGame.Invoke();
+            GameManager.PreGame();
             _gameOverPanel.SetActive(false);
             _mainPanel.SetActive(true);
         }

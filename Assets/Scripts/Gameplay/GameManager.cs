@@ -3,15 +3,25 @@ using System;
 
 namespace TraineeGame
 {
-    public class GameManager : MonoBehaviour
+    public static class GameManager 
     {
         //TODO: make a static class and add unsubscription 
-        public static Action onPreGame;
-        public static Action onGameplay;
-        public static Action onEndGame;
-        public void StartGame()
+        public static event Action onPreGame;
+        public static event Action onGameplay;
+        public static event Action onEndGame;
+        public static void PreGame()
         {
             onPreGame?.Invoke();
+        }
+
+        public static void Gameplay()
+        {
+            onGameplay?.Invoke();
+        }
+
+        public static void GameOver()
+        {
+            onEndGame?.Invoke();
         }
     }
 }

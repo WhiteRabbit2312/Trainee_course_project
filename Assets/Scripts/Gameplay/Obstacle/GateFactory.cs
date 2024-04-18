@@ -2,14 +2,18 @@ using UnityEngine;
 
 namespace TraineeGame
 {
-    public class GateFactory : MonoBehaviour, IObstacleType // GateFactory
+    public class GateFactory : IObtacleFactory // GateFactory
     {
-        [SerializeField] private ObstacleMovement _prefab;
+        private ObstacleMovement _prefab;
 
-
-        public ObstacleMovement GetObstacle() //CreateObstacle
+        public GateFactory(ObstacleMovement prefab)
         {
-            ObstacleMovement gate = Instantiate(_prefab);
+            _prefab = prefab;
+        }
+
+        public ObstacleMovement CreateObstacle() //CreateObstacle
+        {
+            ObstacleMovement gate = GameObject.Instantiate(_prefab);
             return gate;
         }
     }

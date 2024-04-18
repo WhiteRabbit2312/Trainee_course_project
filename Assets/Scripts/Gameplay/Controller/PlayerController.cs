@@ -38,16 +38,9 @@ namespace TraineeGame
             playerPos = PlayerPos.Center;
             rb = GetComponent<Rigidbody>();
             _collider = GetComponent<CapsuleCollider>();
+            GameManager.onPreGame += Idle;
         }
 
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
-
-        // Update is called once per frame
         void Update()
         {
             if (_input.GoLeft())
@@ -72,6 +65,10 @@ namespace TraineeGame
             }
         }
 
+        private void Idle()
+        {
+            transform.position = Vector3.zero;
+        }
 
         private void Jump()
         {
@@ -149,7 +146,7 @@ namespace TraineeGame
 
         private void Deatn()
         {
-            GameManager.onEndGame?.Invoke();
+            GameManager.GameOver();
         }
     }
 }

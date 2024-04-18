@@ -17,6 +17,7 @@ namespace TraineeGame
         private void Awake()
         {
             GameManager.onEndGame += StopMove;
+            GameManager.onGameplay += StartMove;
         }
 
         public void ApplySpeed(ISpeedPlayer speedPlayer)
@@ -43,6 +44,7 @@ namespace TraineeGame
         }
 
         private void StopMove() => _canMove = false;
+        private void StartMove() => _canMove = true;
 
         private void MoveObstacle()
         {

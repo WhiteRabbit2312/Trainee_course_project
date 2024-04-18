@@ -1,7 +1,7 @@
 namespace TraineeGame
 {
-    public interface IObstacleType // IObtacleFactory
+    public interface IObtacleFactory // IObtacleFactory
     {
-        ObstacleMovement GetObstacle();
+        ObstacleMovement CreateObstacle();
     }
 }

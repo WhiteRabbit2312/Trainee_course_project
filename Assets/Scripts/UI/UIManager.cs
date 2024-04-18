@@ -1,20 +1,18 @@
 using UnityEngine;
 
-
 namespace TraineeGame
 {
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private GameObject _mainPanel;
         [SerializeField] private GameObject _gameOverPanel;
-        [SerializeField] private GameObject _inGamePanel;
 
         private void Awake()
         {
             GameManager.onGameplay += CloseMenuTab;
             GameManager.onEndGame += EnablegameOverPanel;
         }
-        
+
         public void StartButton()
         {
             GameManager.Gameplay();
@@ -27,7 +25,6 @@ namespace TraineeGame
 
         private void EnablegameOverPanel()
         {
-
             _gameOverPanel.SetActive(true);
         }
 
@@ -38,7 +35,7 @@ namespace TraineeGame
 
         public void RespawnGameButton()
         {
-
+            GameManager.Gameplay();
         }
 
         public void ReturnToMenuButton()

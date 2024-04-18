@@ -1,18 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class MainGamePanel : MonoBehaviour
+namespace TraineeGame
 {
-    // Start is called before the first frame update
-    void Start()
+    public class MainGamePanel : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private GameObject _mainPanel;//TODO
+        [SerializeField] private GameObject _gameOverPanel;//TODO
+        [SerializeField] private Button startButton;
+        [SerializeField] private Button exitButton;
+        private void Awake()
+        {
+            GameManager.onGameplay += CloseMenuTab;
+            startButton.onClick.AddListener(StartGame);
+            exitButton.onClick.AddListener(ExitButton);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void StartGame()
+        {
+            GameManager.Gameplay();
+        }
+
+        private void CloseMenuTab()
+        {
+            _mainPanel.SetActive(false);
+        }
+
+        public void ExitButton()
+        {
+            Application.Quit();
+        }
     }
 }

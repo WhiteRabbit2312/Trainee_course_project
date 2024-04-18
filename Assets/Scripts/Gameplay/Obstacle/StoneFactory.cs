@@ -5,7 +5,6 @@ namespace TraineeGame
     public class StoneFactory: IObtacleFactory
     {
         private ObstacleMovement _prefab;
-        //TODO: Create class without monobehaviour 
         public StoneFactory(ObstacleMovement obstacle)
         {
             _prefab = obstacle;

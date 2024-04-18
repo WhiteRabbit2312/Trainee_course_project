@@ -8,8 +8,13 @@ namespace TraineeGame
     {
         [SerializeField] private ObstacleMovement _prefabStone;
         [SerializeField] private ObstacleMovement _prefabGate;
-        private const int PrefabNumber = 20; //PrefabCount
-        private const int ObstacleType = 2; //MaxPbstacleCount
+        private const int PrefabCount = 20; 
+        private const int MaxObstacleCount = 2; 
+        private const int MaxSpawnCount = 3;
+
+        private const float _leftSpawnPos = -1.4f;
+        private const float _centerSpawnPos = 0f;
+        private const float _rightSpawnPos = 1.4f;
 
         private List<ObstacleMovement> _pool = new List<ObstacleMovement>();
         
@@ -17,8 +22,12 @@ namespace TraineeGame
         private IObtacleFactory _gateObstacle;
 
         private int counter = 10;
-        private float _speed = 5f;
+        private float _speed = 15f;
         private bool _isGameplay = true;
+
+        private Vector3 _spawnLeft;
+        private Vector3 _spawnCenter;
+        private Vector3 _spawnRight;
 
 
         public float Speed
@@ -35,14 +44,17 @@ namespace TraineeGame
 
             GameManager.onGameplay += CanPlay;
             GameManager.onEndGame += StopPlay;
-          
+
+            _spawnLeft = new Vector3(_leftSpawnPos, transform.position.y, transform.position.z);
+            _spawnCenter = new Vector3(_centerSpawnPos, transform.position.y, transform.position.z);
+            _spawnRight = new Vector3(_rightSpawnPos, transform.position.y, transform.position.z);
         }
 
         private void Start()
         {
-            for (int i = 0; i < PrefabNumber; ++i)
+            for (int i = 0; i < PrefabCount; ++i)
             {
-                int obstacleType = Random.Range(0, ObstacleType);
+                int obstacleType = Random.Range(0, MaxObstacleCount);
                 var _obstacle = GetObstacleType(obstacleType);
                
                 _obstacle.gameObject.SetActive(false);
@@ -89,6 +101,7 @@ namespace TraineeGame
                 if (obstacle != null)
                 {
                     obstacle.gameObject.SetActive(true);
+                    obstacle.gameObject.transform.position = SpawnPoint();
                     counter++;
 
                     if(counter % 20 == 0)
@@ -101,7 +114,20 @@ namespace TraineeGame
 
         }
 
+        private Vector3 SpawnPoint()
+        {
+            Vector3 obstaclePosition = default;
 
+            int spawner = Random.Range(0, MaxSpawnCount);
+            switch (spawner)
+            {
+                case 0: obstaclePosition = _spawnLeft; break;
+                case 1: obstaclePosition = _spawnCenter; break;
+                case 2: obstaclePosition = _spawnRight; break;
+            }
+
+            return obstaclePosition;
+        }
 
         private void DisableObstacles()
         {

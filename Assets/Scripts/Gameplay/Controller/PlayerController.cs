@@ -6,10 +6,9 @@ namespace TraineeGame
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private LayerMask groundLayer;
-        [SerializeField] private Animation _animation;
+        [SerializeField] private LayerMask _groundLayer;
 
-        private float groundCheckDistance = 1f;
+        private float _groundCheckDistance = 1f;
         private IMovement _input;
         public static event Action onPlayerIdle;
         public static Action onPlayerJump;
@@ -20,8 +19,8 @@ namespace TraineeGame
         private float _leftPosX = -1.4f;
         private float _rightPosX = 1.4f;
 
-        private PlayerPos playerPos;
-        private Rigidbody rb;
+        private PlayerPos _playerPos;
+        private Rigidbody _rb;
         private float jumpForce = 6f;
         private bool _isGrounded = true;
         private CapsuleCollider _collider;
@@ -35,8 +34,8 @@ namespace TraineeGame
 #elif UNITY_ANDROID
         _input = new MainInput();
 #endif
-            playerPos = PlayerPos.Center;
-            rb = GetComponent<Rigidbody>();
+            _playerPos = PlayerPos.Center;
+            _rb = GetComponent<Rigidbody>();
             _collider = GetComponent<CapsuleCollider>();
             GameManager.onPreGame += Idle;
         }
@@ -75,12 +74,12 @@ namespace TraineeGame
             onPlayerJump?.Invoke();
             
             if(CheckGround())
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
         private bool CheckGround()
         {
-            bool isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+            bool isGrounded = Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance, _groundLayer);
             return isGrounded;
         }
 
@@ -103,37 +102,53 @@ namespace TraineeGame
 
         private void Left()
         {
-            if (playerPos == PlayerPos.Center)
+            StopCoroutine(ChangePosition());
+
+            if (_playerPos == PlayerPos.Center)
             {
-                transform.position = new Vector3(_leftPosX, transform.position.y, transform.position.z);
-                playerPos = PlayerPos.Left;
+                StartCoroutine(ChangePosition(_leftPosX));
+
+                _playerPos = PlayerPos.Left;
             }
 
-            else if (playerPos == PlayerPos.Right)
+            else if (_playerPos == PlayerPos.Right)
             {
-                transform.position = new Vector3(_centerPosX, transform.position.y, transform.position.z);
-                playerPos = PlayerPos.Center;
+                StartCoroutine(ChangePosition(_centerPosX));
+                _playerPos = PlayerPos.Center;
+            }
+        }
+
+        private IEnumerator ChangePosition(float newX = 0)
+        {
+            float t = 0f;
+            Vector3 startPos = transform.position;
+            while (transform.position.x != newX)
+            {
+                t += Time.deltaTime * 10f;
+                transform.position = Vector3.Lerp(startPos,
+                    new Vector3(newX, transform.position.y, transform.position.z), t);
+                yield return new WaitForEndOfFrame();
             }
 
-            else return;
         }
 
         private void Right()
         {
-            if (playerPos == PlayerPos.Center)
+            StopCoroutine(ChangePosition());
+            if (_playerPos == PlayerPos.Center)
             {
-                transform.position = new Vector3(_rightPosX, transform.position.y, transform.position.z);
-                playerPos = PlayerPos.Right;
+                StartCoroutine(ChangePosition(_rightPosX));
+
+                _playerPos = PlayerPos.Right;
             }
 
-            else if (playerPos == PlayerPos.Left)
+            else if (_playerPos == PlayerPos.Left)
             {
-                transform.position = new Vector3(_centerPosX, transform.position.y, transform.position.z);
+                StartCoroutine(ChangePosition(_centerPosX));
 
-                playerPos = PlayerPos.Center;
+                _playerPos = PlayerPos.Center;
             }
 
-            else return;
         }
 
         private void OnTriggerEnter(Collider other)

@@ -13,13 +13,7 @@ namespace TraineeGame
         private bool swipeDown;
         private bool swipeLeft;
         private bool swipeRight;
-        // Start is called before the first frame update
-        void Start()
-        {
 
-        }
-
-        // Update is called once per frame
         void Update()
         {
             Controller();

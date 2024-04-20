@@ -1,10 +1,13 @@
-public interface ISpeedPlayer 
+namespace TraineeGame
 {
-    public float Speed
+    public interface ISpeedPlayer
     {
-        get;
-        set;
+        public float Speed
+        {
+            get;
+            set;
+        }
+
+
     }
-
-
 }

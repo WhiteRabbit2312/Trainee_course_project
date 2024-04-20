@@ -1,7 +1,9 @@
-public enum PlayerPos
+namespace TraineeGame
 {
-    Left,
-    Center,
-    Right
+    public enum PlayerPos
+    {
+        Left,
+        Center,
+        Right
+    }
 }
-

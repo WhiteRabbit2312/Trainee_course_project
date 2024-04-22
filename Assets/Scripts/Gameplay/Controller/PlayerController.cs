@@ -155,11 +155,11 @@ namespace TraineeGame
         {
             if(other.gameObject.tag == "Obstacle")
             {
-                Deatn();
+                Death();
             }
         }
 
-        private void Deatn()
+        private void Death()
         {
             GameManager.GameOver();
         }

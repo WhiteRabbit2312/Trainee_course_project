@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,8 +13,6 @@ public class LogInButton : MonoBehaviour
     private Coroutine _registrationCoroutine;
     [SerializeField] private Button _logInButton;
     [SerializeField] private RegistrationUIFlow _registrationFlow;
-    // Start is called before the first frame update
-
 
     private void Reset()
     {
@@ -27,60 +24,60 @@ public class LogInButton : MonoBehaviour
     {
         RegistrationUIFlow.OnStateChanged += HandleRegistrationStateChanged;
         _logInButton.onClick.AddListener(HandRegistrationStateClicked);
-        UpdateInteractable();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-
-    }
-
-    private void UpdateInteractable()
-    {
-        _logInButton.interactable =
-            _registrationFlow.CurrentState == RegistrationUIFlow.State.Ok
-            && _registrationCoroutine == null;
+        RegistrationUIFlow.OnStateChanged -= HandleRegistrationStateChanged;
+        _logInButton.onClick.RemoveListener(HandRegistrationStateClicked);
     }
 
     private void HandleRegistrationStateChanged(RegistrationUIFlow.State registrationState)
     {
-        UpdateInteractable();
     }
 
     private void HandRegistrationStateClicked()
     {
-        _registrationCoroutine = StartCoroutine(routine: LogOutUser(_emailField.text, _passwordField.text));
-        UpdateInteractable();
+        _registrationCoroutine = StartCoroutine(routine: LogInUser(_emailField.text, _passwordField.text));
     }
 
-    private IEnumerator LogOutUser(string email, string password)
+    private IEnumerator LogInUser(string email, string password)
     {
         var auth = FireManager.Instance.Auth;
+
+        bool isLogedIn = false;//TODO
 
         var logOutTask = auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
         {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                isLogedIn = false;
                 return;
             }
             if (task.IsFaulted)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                isLogedIn = false;
                 return;
             }
 
             Firebase.Auth.AuthResult result = task.Result;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 result.User.DisplayName, result.User.UserId);
+            isLogedIn = true;
+
         });
 
         yield return new WaitUntil(predicate: () => logOutTask.IsCompleted);
 
-        _registrationCoroutine = null;
-        UpdateInteractable();
-        OnUserLogedIn?.Invoke();
+        if (isLogedIn)
+        {
+            _registrationCoroutine = null;
+            OnUserLogedIn?.Invoke();
+            PlayerPrefs.SetInt("LogedIn", 1);
+        }
+        
     }
 
 }

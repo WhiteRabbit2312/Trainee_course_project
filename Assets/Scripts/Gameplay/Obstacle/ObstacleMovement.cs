@@ -28,9 +28,12 @@ namespace TraineeGame
         private void StopMove() => _canMove = false;
         private void StartMove() => _canMove = true;
 
+
         private void MoveObstacle()
         {
             transform.Translate(_dirVector.normalized * _speed.Speed * Time.deltaTime);
+
+            Debug.Log("Move");
         }
     }
 }

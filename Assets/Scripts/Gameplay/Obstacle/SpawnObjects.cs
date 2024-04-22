@@ -21,7 +21,7 @@ namespace TraineeGame
         private IObtacleFactory _stoneObstacle;
         private IObtacleFactory _gateObstacle;
 
-        private int counter = 10;
+        private int _score = 0;
         private float _speed = 15f;
         private bool _isGameplay = true;
 
@@ -36,7 +36,6 @@ namespace TraineeGame
             set { _speed = value; }
         }
 
-
         private void Awake()
         {
             _stoneObstacle = new StoneFactory(_prefabStone);
@@ -44,6 +43,7 @@ namespace TraineeGame
 
             GameManager.onGameplay += CanPlay;
             GameManager.onEndGame += StopPlay;
+            GameManager.onPreGame += ReturnToMenu;
 
             _spawnLeft = new Vector3(_leftSpawnPos, transform.position.y, transform.position.z);
             _spawnCenter = new Vector3(_centerSpawnPos, transform.position.y, transform.position.z);
@@ -54,7 +54,7 @@ namespace TraineeGame
         {
             for (int i = 0; i < PrefabCount; ++i)
             {
-                int obstacleType = Random.Range(0, MaxObstacleCount);
+                int obstacleType = UnityEngine.Random.Range(0, MaxObstacleCount);
                 var _obstacle = GetObstacleType(obstacleType);
                
                 _obstacle.gameObject.SetActive(false);
@@ -86,12 +86,18 @@ namespace TraineeGame
             _isGameplay = true;
             StartCoroutine(SpawnObstacle()); 
         }
+
+
         private void StopPlay()
         {
             _isGameplay = false;
-            DisableObstacles();
+           
         }
             
+        private void ReturnToMenu()
+        {
+            DisableObstacles();
+        }
 
         private IEnumerator SpawnObstacle()
         {
@@ -102,9 +108,9 @@ namespace TraineeGame
                 {
                     obstacle.gameObject.SetActive(true);
                     obstacle.gameObject.transform.position = SpawnPoint();
-                    counter++;
+                    _score++;
 
-                    if(counter % 20 == 0)
+                    if (_score % 20 == 0)
                     {
                         Speed += 1; 
                     }
@@ -118,7 +124,7 @@ namespace TraineeGame
         {
             Vector3 obstaclePosition = default;
 
-            int spawner = Random.Range(0, MaxSpawnCount);
+            int spawner = UnityEngine.Random.Range(0, MaxSpawnCount);
             switch (spawner)
             {
                 case 0: obstaclePosition = _spawnLeft; break;

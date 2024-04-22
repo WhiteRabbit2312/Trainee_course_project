@@ -7,7 +7,5 @@ namespace TraineeGame
             get;
             set;
         }
-
-
     }
 }

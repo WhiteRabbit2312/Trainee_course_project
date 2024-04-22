@@ -1,34 +1,56 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-using Firebase;
 using Firebase.Database;
 using Firebase.Auth;
-using System;
+using TraineeGame;
+using System.Collections.Generic;
+using System.Linq;
+
 public class User : MonoBehaviour
 {
-    private FirebaseUser _firebaseUser;
+    [SerializeField] private Item prefab;
 
-    private string userID;
+    private FirebaseUser _firebaseUser;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
 
         RegistrationButton.OnUserRegistered += CreateUser;
+        LogInButton.OnUserLogedIn += CreateUser;
+        UIRegister.OnSilentAuthorization += CreateUser;
+
         RegistrationButton.OnWriteNewUser += WriteNewUser;
+        MainGamePanel.OnLeaderbordOpen += GetDataButton;
+        ScoreCount.OnSetScore += WriteNewScore;
     }
 
     private void CreateUser()
     {
         _firebaseUser = FirebaseAuth.DefaultInstance.CurrentUser;
-        userID = _firebaseUser.UserId;
     }
 
     private void WriteNewUser(string name)
     {
         DatabaseReference.Instance.Reference.Child("User").Child(_firebaseUser.UserId).Child("name").SetValueAsync(name);
+    }
+
+    private void WriteNewScore(int score)
+    {
+        if (DatabaseReference.Instance == null)
+        {
+            Debug.Log("Instance is null");
+        }
+
+        if(DatabaseReference.Instance.Reference == null)
+        {
+            Debug.Log("Reference is null");
+        }
+        if(_firebaseUser == null)
+        {
+            Debug.Log("ASDADWAED");
+        }
+        DatabaseReference.Instance.Reference.Child("User").Child(_firebaseUser.UserId).Child("score").SetValueAsync(score);
     }
 
     public void GetDataButton()
@@ -40,7 +62,6 @@ public class User : MonoBehaviour
     {
         var task = DatabaseReference.Instance.Reference.Child("User").GetValueAsync();
 
-
         yield return new WaitUntil(() => task.IsCompleted);
 
         if (task.IsFaulted || task.IsCanceled)
@@ -51,12 +72,70 @@ public class User : MonoBehaviour
         {
             DataSnapshot snapshot = task.Result;
 
-            Debug.Log("Result: " + snapshot);
+            
+            List<Row> rows = new List<Row>();
             foreach(var item in snapshot.Children)
             {
-                Debug.Log(item.Child("name").Value);
+                if (!item.HasChild("score"))
+                    continue;
+                
+                Row newRow = new Row();
+                newRow.Name = item.Child("name").Value.ToString();
+                newRow.Score = int.Parse(item.Child("score").Value.ToString());
+                rows.Add(newRow);
+
+
+                /*
+                Item row = Instantiate(prefab, rowPosition.transform);
+
+                row.PlaceText.text = placeCount.ToString();
+                row.NameText.text = (string)item.Child("name").Value.ToString();
+
+                Debug.Log("Score value " + item.Child("score").Value);
+                row.ScoreText.text = item.Child("score").Value.ToString();
+                placeCount++;
+
+                */
             }
+            ClearLeaderBoard();
+            SortRows(rows);
+
         }
 
+    }
+
+    private void SortRows(List<Row> rowsToSort)
+    {
+        int placeCount = 1;
+
+        var sortedList = rowsToSort.OrderByDescending(n => n.Score).ToList();
+
+        List<Row> rowsToSortNew = (List<Row>)sortedList;
+
+
+        for (int i = 0; i < rowsToSort.Count; ++i)
+        {
+            GameObject rowPosition = GameObject.FindGameObjectWithTag("PrefabPosition");//TODO
+            Item row = Instantiate(prefab, rowPosition.transform);
+
+            row.PlaceText.text = placeCount.ToString();
+            row.NameText.text = rowsToSortNew[i].Name;
+
+            row.ScoreText.text = rowsToSortNew[i].Score.ToString(); 
+            placeCount++;
+        }
+        
+
+
+    }
+
+    private void ClearLeaderBoard()
+    {
+        GameObject[] itemOnScene = GameObject.FindGameObjectsWithTag("Item");
+
+        foreach(var item in itemOnScene)
+        {
+            Destroy(item);
+        }
     }
 }

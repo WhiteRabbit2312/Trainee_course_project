@@ -22,7 +22,7 @@ public class LoadSceneWhenAuth : MonoBehaviour
     {
         if (FirebaseAuth.DefaultInstance.CurrentUser != null)
         {
-            //SceneManager.LoadScene(_sceneToLoad);
+            SceneManager.LoadScene(_sceneToLoad);
         }
         
     }

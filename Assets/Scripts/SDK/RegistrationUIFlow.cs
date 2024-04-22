@@ -9,7 +9,9 @@ public class RegistrationUIFlow : MonoBehaviour
 {
     [HideInInspector] public string Email;
     [HideInInspector] public string Password;
+    [HideInInspector] public string Name;
     [SerializeField] private TMP_InputField _emailField;
+    [SerializeField] private TMP_InputField _nameField;
     [SerializeField] private TMP_InputField _passwordField;
     [SerializeField] private TMP_InputField _verifyPasswordField;
 
@@ -43,6 +45,12 @@ public class RegistrationUIFlow : MonoBehaviour
             SetState(State.EnterEmail);
         }
 
+        else if (string.IsNullOrEmpty(_nameField.text))
+        {
+            Name = _nameField.text;
+            SetState(State.EnterName);
+        }
+
         else if (string.IsNullOrEmpty(_passwordField.text))
         {
             Password = _passwordField.text;
@@ -69,6 +77,7 @@ public class RegistrationUIFlow : MonoBehaviour
     public enum State
     {
         EnterEmail,
+        EnterName,
         EnterPassword,
         PasswordDontMatch,
         Ok

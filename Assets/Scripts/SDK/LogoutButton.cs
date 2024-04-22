@@ -1,11 +1,13 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using Firebase.Auth;
 
-public class LogoutButton : MonoBehaviour, IPointerClickHandler
+public class LogoutButton : MonoBehaviour//, IPointerClickHandler
 {
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick()//(PointerEventData eventData)
     {
         FirebaseAuth.DefaultInstance.SignOut();
+        PlayerPrefs.SetInt("LogedIn", 0);
+        SceneManager.LoadScene(0);
     }
 }

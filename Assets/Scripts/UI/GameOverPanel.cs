@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 namespace TraineeGame
 {
@@ -9,11 +10,17 @@ namespace TraineeGame
     {
         [SerializeField] private GameObject _mainPanel;//TODO
         [SerializeField] private GameObject _gameOverPanel;//TODO
+        [SerializeField] private GameObject _leaderBoardPanel;//TODO
+
         [SerializeField] private Button returnToMenuButton;
+        [SerializeField] private Button rewardButton;
+
+        public static event Action OnRespawnClicked;
 
         private void Awake()
         {
             returnToMenuButton.onClick.AddListener(ReturnToMenuButton);
+            rewardButton.onClick.AddListener(RespawnButton);
             GameManager.onEndGame += EnablegameOverPanel;
         }
 
@@ -22,12 +29,18 @@ namespace TraineeGame
             _gameOverPanel.SetActive(false);
             _mainPanel.SetActive(true);
             GameManager.PreGame();
+
         }
 
         private void EnablegameOverPanel()
         {
-
             _gameOverPanel.SetActive(true);
+        }
+
+        public void RespawnButton()
+        {
+            OnRespawnClicked?.Invoke();
+            _gameOverPanel.SetActive(false);
         }
     }
 }

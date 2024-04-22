@@ -61,10 +61,10 @@ public class LogInButton : MonoBehaviour
                 isLogedIn = false;
                 return;
             }
-
+            /*
             Firebase.Auth.AuthResult result = task.Result;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
-                result.User.DisplayName, result.User.UserId);
+                result.User.DisplayName, result.User.UserId);*/
             isLogedIn = true;
 
         });

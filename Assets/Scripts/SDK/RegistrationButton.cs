@@ -73,11 +73,11 @@ public class RegistrationButton : MonoBehaviour
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
-
+            /*
             // Firebase user has been created.
             Firebase.Auth.AuthResult result = task.Result;
             UnityEngine.Debug.LogFormat("Firebase user created successfully: {0} ({1})",
-                result.User.DisplayName, result.User.UserId);
+                result.User.DisplayName, result.User.UserId);*/
         });
 
         yield return new WaitUntil(predicate: () => registerTask.IsCompleted);

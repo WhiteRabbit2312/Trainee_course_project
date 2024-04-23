@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using System;
@@ -7,13 +5,14 @@ using TraineeGame;
 
 public class Advertising : MonoBehaviour
 {
+    [SerializeField] private GameObject _gameOverPanel;
     private RewardedAd _rewardedAd;
 
     private string _adUnitId = "ca-app-pub-3940256099942544/5224354917";
 
     private void Start()
     {
-        GameOverPanel.OnRespawnClicked += LoadRewardedAd;
+        GameManager.onGameplay += LoadRewardedAd;
         GameOverPanel.OnRespawnClicked += ShowRewardedAd;
     }
 
@@ -47,7 +46,9 @@ public class Advertising : MonoBehaviour
                           + ad.GetResponseInfo());
 
                 _rewardedAd = ad;
+                RegisterEventHandlers(ad);
             });
+
     }
 
     private void ShowRewardedAd()
@@ -66,5 +67,18 @@ public class Advertising : MonoBehaviour
         }
     }
 
+    private void RegisterEventHandlers(RewardedAd ad)
+    {
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+            _gameOverPanel.SetActive(false);
+        };
+    }
+
+        private void OnDestroy()
+    {
+        GameOverPanel.OnRespawnClicked -= LoadRewardedAd;
+        GameOverPanel.OnRespawnClicked -= ShowRewardedAd;
+    }
 
 }

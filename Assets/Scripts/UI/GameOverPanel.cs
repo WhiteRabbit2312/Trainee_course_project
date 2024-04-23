@@ -10,7 +10,6 @@ namespace TraineeGame
     {
         [SerializeField] private GameObject _mainPanel;//TODO
         [SerializeField] private GameObject _gameOverPanel;//TODO
-        [SerializeField] private GameObject _leaderBoardPanel;//TODO
 
         [SerializeField] private Button returnToMenuButton;
         [SerializeField] private Button rewardButton;
@@ -40,7 +39,12 @@ namespace TraineeGame
         public void RespawnButton()
         {
             OnRespawnClicked?.Invoke();
-            _gameOverPanel.SetActive(false);
+            
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.onEndGame -= EnablegameOverPanel;
         }
     }
 }

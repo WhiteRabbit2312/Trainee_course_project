@@ -44,5 +44,11 @@ namespace TraineeGame
             _gameOverPanel.SetActive(false);
             _mainPanel.SetActive(true);
         }
+
+        private void OnDestroy()
+        {
+            GameManager.onGameplay -= CloseMenuTab;
+            GameManager.onEndGame -= EnablegameOverPanel;
+        }
     }
 }

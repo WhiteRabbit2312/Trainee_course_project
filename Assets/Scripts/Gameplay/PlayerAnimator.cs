@@ -38,5 +38,16 @@ namespace TraineeGame
         {
             animator.SetBool("Slide", true);
         }
+
+        private void OnDestroy()
+        {
+            GameManager.onEndGame -= StayAnimation;
+
+            PlayerController.onPlayerJump -= JumpAnimation;
+            PlayerController.onPlayerRun -= RunAnimation;
+            PlayerController.onPlayerSlide -= SlideAnimation;
+
+            GameManager.onGameplay -= RunAnimation;
+        }
     }
 }

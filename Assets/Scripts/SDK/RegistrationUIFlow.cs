@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Events;
 using System;
 
 public class RegistrationUIFlow : MonoBehaviour
 {
+    [SerializeField] private Button regisrtationButton;
+
     [HideInInspector] public string Email;
     [HideInInspector] public string Password;
     [HideInInspector] public string Name;
@@ -30,6 +30,8 @@ public class RegistrationUIFlow : MonoBehaviour
         _verifyPasswordField.onValueChanged.AddListener(ValueChanged);
 
         ComputeState();
+        regisrtationButton.gameObject.GetComponent<Image>().color = new Color(0.6f, 0.6f, 0.6f);
+        regisrtationButton.enabled = false;
     }
 
     private void ValueChanged(string _)
@@ -55,15 +57,19 @@ public class RegistrationUIFlow : MonoBehaviour
         {
             Password = _passwordField.text;
             SetState(State.EnterPassword);
+            regisrtationButton.gameObject.GetComponent<Image>().color = new Color(0.6f, 0.6f, 0.6f);
         }
 
         else if (_passwordField.text != _verifyPasswordField.text)
         {
+            regisrtationButton.gameObject.GetComponent<Image>().color = new Color(0.6f, 0.6f, 0.6f);
             SetState(State.PasswordDontMatch);
         }
 
         else
         {
+            regisrtationButton.gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f);
+            regisrtationButton.enabled = true;
             SetState(State.Ok);
         }
     }

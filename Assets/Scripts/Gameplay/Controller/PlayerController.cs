@@ -23,6 +23,7 @@ namespace TraineeGame
         private Rigidbody _rb;
         private float jumpForce = 6f;
         private bool _isGrounded = true;
+        private bool _canControl = false;
         private CapsuleCollider _collider;
        
         private void Awake()
@@ -32,37 +33,46 @@ namespace TraineeGame
             _input = GetComponent<TestingInput>();
 
 #elif UNITY_ANDROID
-        _input = new MainInput();
+        _input = GetComponent<MainInput>();
 #endif
             _playerPos = PlayerPos.Center;
             _rb = GetComponent<Rigidbody>();
             _collider = GetComponent<CapsuleCollider>();
             GameManager.onPreGame += Idle;
+            GameManager.onPreGame += StopControl;
+            GameManager.onGameplay += CanControl;
+            GameManager.onEndGame += StopControl;
         }
 
         void Update()
         {
-            if (_input.GoLeft())
+            if (_canControl)
             {
-                Left();
-            }
+                if (_input.GoLeft())
+                {
+                    Left();
+                }
 
-            else if (_input.GoRight())
-            {
-                Right();
-            }
+                else if (_input.GoRight())
+                {
+                    Right();
+                }
 
-            else if (_input.GoUp())
-            {
-                if(_isGrounded)
-                    Jump();
-            }
+                else if (_input.GoUp())
+                {
+                    if (_isGrounded)
+                        Jump();
+                }
 
-            else if (_input.GoDown())
-            {
-                Slide();
+                else if (_input.GoDown())
+                {
+                    Slide();
+                }
             }
         }
+
+        private void CanControl() => _canControl = true;
+        private void StopControl() => _canControl = false;
 
         private void Idle()
         {
@@ -102,6 +112,8 @@ namespace TraineeGame
 
         private void Left()
         {
+            Debug.Log("Is left");
+
             StopCoroutine(ChangePosition());
 
             if (_playerPos == PlayerPos.Center)
@@ -134,6 +146,8 @@ namespace TraineeGame
 
         private void Right()
         {
+            Debug.Log("Is right");
+
             StopCoroutine(ChangePosition());
             if (_playerPos == PlayerPos.Center)
             {
@@ -162,6 +176,11 @@ namespace TraineeGame
         private void Death()
         {
             GameManager.GameOver();
+        }
+
+        private void OnDestroy()
+        {
+            
         }
     }
 }

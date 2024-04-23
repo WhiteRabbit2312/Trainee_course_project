@@ -42,5 +42,10 @@ public class ScoreCount : MonoBehaviour
         _textScore.text = _score.ToString();
     }
 
-    
+    private void OnDestroy()
+    {
+        GameManager.onGameplay -= CanCount;
+        GameManager.onEndGame -= StopCount;
+        GameManager.onPreGame -= Resetscore;
+    }
 }

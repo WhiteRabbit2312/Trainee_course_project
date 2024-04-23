@@ -1,6 +1,5 @@
 using UnityEngine;
 using Firebase.Auth;
-using System;
 using UnityEngine.SceneManagement;
 
 public class LoadSceneWhenAuth : MonoBehaviour
@@ -25,5 +24,11 @@ public class LoadSceneWhenAuth : MonoBehaviour
             SceneManager.LoadScene(_sceneToLoad);
         }
         
+    }
+
+    private void OnDestroy()
+    {
+        RegistrationButton.OnUserRegistered -= HandleAuthStateChanged;
+        LogInButton.OnUserLogedIn -= HandleAuthStateChanged;
     }
 }

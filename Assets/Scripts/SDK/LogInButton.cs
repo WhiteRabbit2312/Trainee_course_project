@@ -6,17 +6,20 @@ using System;
 
 public class LogInButton : MonoBehaviour
 {
+    [SerializeField] private GameObject _wrongPasswordPanel;
+    [SerializeField] private GameObject _wrongEmailPanel;
+
+
     [SerializeField] private TMP_InputField _emailField;
     [SerializeField] private TMP_InputField _passwordField;
 
     public static Action OnUserLogedIn;
     private Coroutine _registrationCoroutine;
     [SerializeField] private Button _logInButton;
-    [SerializeField] private RegistrationUIFlow _registrationFlow;
 
     private void Reset()
     {
-        _registrationFlow = FindObjectOfType<RegistrationUIFlow>();
+
         _logInButton = GetComponent<Button>();
     }
 
@@ -53,12 +56,15 @@ public class LogInButton : MonoBehaviour
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
                 isLogedIn = false;
+
+                
                 return;
             }
             if (task.IsFaulted)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 isLogedIn = false;
+               
                 return;
             }
             /*
@@ -77,7 +83,11 @@ public class LogInButton : MonoBehaviour
             OnUserLogedIn?.Invoke();
             PlayerPrefs.SetInt("LogedIn", 1);
         }
+
+        else
+        {
+            _wrongPasswordPanel.SetActive(true);
+        }
         
     }
-
 }

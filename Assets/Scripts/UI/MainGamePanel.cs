@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
@@ -16,6 +14,8 @@ namespace TraineeGame
         [SerializeField] private Button leaderbordButton;
 
         public static Action OnLeaderbordOpen;
+
+
         private void Awake()
         {
             GameManager.onGameplay += CloseMenuTab;
@@ -48,6 +48,11 @@ namespace TraineeGame
         public void ExitButton()
         {
             Application.Quit();
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.onGameplay -= CloseMenuTab;
         }
     }
 }

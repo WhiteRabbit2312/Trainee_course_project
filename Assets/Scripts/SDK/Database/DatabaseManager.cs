@@ -6,7 +6,7 @@ using TraineeGame;
 using System.Collections.Generic;
 using System.Linq;
 
-public class User : MonoBehaviour
+public class DatabaseManager : MonoBehaviour
 {
     [SerializeField] private Item prefab;
 
@@ -83,20 +83,8 @@ public class User : MonoBehaviour
                 newRow.Name = item.Child("name").Value.ToString();
                 newRow.Score = int.Parse(item.Child("score").Value.ToString());
                 rows.Add(newRow);
-
-
-                /*
-                Item row = Instantiate(prefab, rowPosition.transform);
-
-                row.PlaceText.text = placeCount.ToString();
-                row.NameText.text = (string)item.Child("name").Value.ToString();
-
-                Debug.Log("Score value " + item.Child("score").Value);
-                row.ScoreText.text = item.Child("score").Value.ToString();
-                placeCount++;
-
-                */
             }
+
             ClearLeaderBoard();
             SortRows(rows);
 
@@ -124,9 +112,6 @@ public class User : MonoBehaviour
             row.ScoreText.text = rowsToSortNew[i].Score.ToString(); 
             placeCount++;
         }
-        
-
-
     }
 
     private void ClearLeaderBoard()
@@ -137,5 +122,16 @@ public class User : MonoBehaviour
         {
             Destroy(item);
         }
+    }
+
+    private void OnDestroy()
+    {
+        RegistrationButton.OnUserRegistered -= CreateUser;
+        LogInButton.OnUserLogedIn -= CreateUser;
+        UIRegister.OnSilentAuthorization -= CreateUser;
+
+        RegistrationButton.OnWriteNewUser -= WriteNewUser;
+        MainGamePanel.OnLeaderbordOpen -= GetDataButton;
+        ScoreCount.OnSetScore -= WriteNewScore;
     }
 }

@@ -3,9 +3,14 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Text.RegularExpressions;
 
 public class RegistrationButton : MonoBehaviour
 {
+    [SerializeField] private GameObject passwordsDoNotMatchPanel;
+    [SerializeField] private GameObject _wrongSymbolNumberPanel;
+    [SerializeField] private GameObject _wrongEmailPanel;
+
     [SerializeField] private TMP_InputField _emailField;
     [SerializeField] private TMP_InputField _nameField;
     [SerializeField] private TMP_InputField _passwordField;
@@ -17,6 +22,11 @@ public class RegistrationButton : MonoBehaviour
     public static Action<string> OnWriteNewUser;
 
     private Coroutine _registrationCoroutine;
+
+    public const string EMAIL_PATTERN = @"^(([\w-]+\.)+[\w-]+|([a-zA-Z]{1}|[\w-]{2,}))@"
+   + @"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\.([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\."
+   + @"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\.([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+   + @"([a-zA-Z]+[\w-]+\.)+[a-zA-Z]{2,4})$";
 
     private void Reset()
     {
@@ -32,45 +42,54 @@ public class RegistrationButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //RegistrationUIFlow.OnStateChanged += HandleRegistrationStateChanged;
         _registrationButton.onClick.AddListener(HandRegistrationStateClicked);
-
-        //UpdateInteractable();
     }
 
     private void OnDestroy()
     {
-        //RegistrationUIFlow.OnStateChanged -= HandleRegistrationStateChanged;
         _registrationButton.onClick.RemoveListener(HandRegistrationStateClicked);
     }
 
-    /*
-    private void HandleRegistrationStateChanged(RegistrationUIFlow.State registrationState)
+  
+
+    private bool IsEmailValid(string email)
     {
-        //UpdateInteractable();
+        if (!string.IsNullOrEmpty(email))
+        {
+            return Regex.IsMatch(email, EMAIL_PATTERN);
+        }
+        else
+        {
+            return false;
+        }
     }
-    */
+
     private void HandRegistrationStateClicked()
     {
         _registrationCoroutine = StartCoroutine(routine: RegisterUser(_emailField.text, _passwordField.text));
     }
 
+    bool isRegistered;
     private IEnumerator RegisterUser(string email, string password)
     {
-        Debug.Log("Email: " + email);
-        Debug.Log("Password: " + password);
+        bool validEmail = IsEmailValid(email);
 
         var auth = FireManager.Instance.Auth;
-        var registerTask = auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+        var registerTask = auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
+        {
+
             if (task.IsCanceled)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                isRegistered = false;
                 return;
             }
-            
+
             if (task.IsFaulted)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+
+                isRegistered = false;
                 return;
             }
             /*
@@ -78,16 +97,39 @@ public class RegistrationButton : MonoBehaviour
             Firebase.Auth.AuthResult result = task.Result;
             UnityEngine.Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 result.User.DisplayName, result.User.UserId);*/
+            isRegistered = true;
         });
 
         yield return new WaitUntil(predicate: () => registerTask.IsCompleted);
-
         _registrationCoroutine = null;
-        //UpdateInteractable();
-        OnUserRegistered?.Invoke();
-        OnWriteNewUser?.Invoke(_nameField.text);
 
+        if (!validEmail)
+        {
+            _wrongEmailPanel.SetActive(true);
+        }
+        /*
+        else if (_registrationFlow.CurrentState == RegistrationUIFlow.State.PasswordDontMatch)
+        {
+            passwordsDoNotMatchPanel.SetActive(true);
+            isRegistered = false;
+        }
+        */
+        else
+        {
+            
 
+            if (isRegistered)
+            {
+                
+                OnUserRegistered?.Invoke();
+                OnWriteNewUser?.Invoke(_nameField.text);
+            }
+
+            else
+            {
+                _wrongSymbolNumberPanel.SetActive(true);
+            }
+        }
         
 
     }

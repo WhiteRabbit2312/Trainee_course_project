@@ -35,5 +35,11 @@ namespace TraineeGame
 
             Debug.Log("Move");
         }
+
+        private void OnDestroy()
+        {
+            GameManager.onEndGame -= StopMove;
+            GameManager.onGameplay -= StartMove;
+        }
     }
 }

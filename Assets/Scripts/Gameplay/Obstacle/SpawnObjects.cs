@@ -9,7 +9,7 @@ namespace TraineeGame
         [SerializeField] private ObstacleMovement _prefabStone;
         [SerializeField] private ObstacleMovement _prefabGate;
         private const int PrefabCount = 20; 
-        private const int MaxObstacleCount = 2; 
+        private const int MaxObstacleCount = 100; 
         private const int MaxSpawnCount = 3;
 
         private const float _leftSpawnPos = -1.4f;
@@ -22,7 +22,7 @@ namespace TraineeGame
         private IObtacleFactory _gateObstacle;
 
         private int _score = 0;
-        private float _speed = 15f;
+        private float _speed = 25f;
         private bool _isGameplay = true;
 
         private Vector3 _spawnLeft;
@@ -65,7 +65,7 @@ namespace TraineeGame
 
         private ObstacleMovement GetObstacleType(int type)
         {
-            switch (type)
+            switch (type % 2)
             {
                 case 0:
                     var obst1 = _stoneObstacle.CreateObstacle();
@@ -79,6 +79,13 @@ namespace TraineeGame
 
                 default: return null;
             }
+        }
+
+        void OnDestroy()
+        {
+            GameManager.onGameplay -= CanPlay;
+            GameManager.onEndGame -= StopPlay;
+            GameManager.onPreGame -= ReturnToMenu;
         }
 
         private void CanPlay() 
@@ -99,22 +106,35 @@ namespace TraineeGame
             DisableObstacles();
         }
 
+        List<Vector3> existingSpawnPoints = new List<Vector3>();
         private IEnumerator SpawnObstacle()
         {
             while (_isGameplay)
             {
-                ObstacleMovement obstacle = GetObstacleFromPool();
-                if (obstacle != null)
+                int obstacleCountInRow = Random.Range(1, 4);
+                
+                for (int i = 0; i < obstacleCountInRow; ++i)
                 {
-                    obstacle.gameObject.SetActive(true);
-                    obstacle.gameObject.transform.position = SpawnPoint();
-                    _score++;
-
-                    if (_score % 20 == 0)
+                    ObstacleMovement obstacle = GetObstacleFromPool();
+                    if (obstacle != null)
                     {
-                        Speed += 1; 
+                        obstacle.gameObject.SetActive(true);
+                        do
+                        {
+                            obstacle.gameObject.transform.position = SpawnPoint();
+                        } while (existingSpawnPoints.Contains(obstacle.gameObject.transform.position));
+                        
+
+                        existingSpawnPoints.Add(obstacle.gameObject.transform.position);
+                        _score++;
+
+                        if (_score % 20 == 0)
+                        {
+                            Speed += 1;
+                        }
                     }
                 }
+                existingSpawnPoints.Clear();
                 yield return new WaitForSeconds(1.5f);
             }
 
@@ -155,5 +175,7 @@ namespace TraineeGame
 
             return null;
         }
+       
+        
     }
 }
